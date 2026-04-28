@@ -1,0 +1,21 @@
+requires 1.3.0
+
+# Convert source images to Siril FITS format
+cd /home/sj/astro/stacking-simple/input
+convert light -out=/home/sj/astro/stacking-simple/process
+
+# Register (star-align) all frames
+cd /home/sj/astro/stacking-simple/process
+register light
+
+# Stack into a single 32-bit result
+stack r_light rej 3 3 -norm=addscale -output_norm -rgb_equal -32b -out=/home/sj/astro/stacking-simple/output/stacked
+
+# Flip to display orientation and auto-stretch for a viewable preview
+load /home/sj/astro/stacking-simple/output/stacked
+mirrorx -bottomup
+autostretch
+savetif /home/sj/astro/stacking-simple/output/preview
+savejpg /home/sj/astro/stacking-simple/output/preview 95
+
+close
